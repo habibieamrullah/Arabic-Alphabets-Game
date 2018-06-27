@@ -1,0 +1,470 @@
+<!--
+Developed by Habibie
+habibieamrullah@gmail.com
+zofiakreasi.com
+Do you like this work? Please donate to habibieamrullah@gmail via PayPal :D
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Arabic Alphabets Game by Zofia Kreasi</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+		<script src="howler.js"></script>
+		<script src="jquery.js"></script>
+		<script src="lessons.js"></script>
+		<script src="tests.js"></script>
+		<script src="zkwebapp.js"></script>
+		
+		<style>
+			@font-face{
+				font-family:'lato';
+				src:url('lato.ttf');
+			}
+			body{
+                margin: 0;
+                padding: 0;
+                font-family: 'lato', tahoma;
+                font-size: 16px;
+                user-select: none;
+				background-color: #598c82;
+				color: white;
+            }
+			h1, h2, h3, h4, h5, p{
+				margin: 0;
+				margin-bottom: 20px;
+			}
+			a{
+				color: white;
+				text-decoration: underline;
+			}
+			#appbar{
+				background-color: #264c44;
+				padding: 20px;
+				-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+			}
+			#leftnav{
+				padding: 20px;
+				padding-bottom: 70px;
+				background-color: rgba(5, 25, 21, .9);
+				display: none;
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				overflow: auto;
+			}
+			.lni{
+				margin-bottom: 20px;
+			}
+			.lni:hover{
+				color: #82ffe2;
+			}
+			#rightnav{
+				position: fixed;
+				right: 0;
+				background-color: white;
+				margin: 10px;
+				border-radius: 5px;
+				color: #264c44;
+				display: none;
+				padding-bottom: 5px;
+				font-size: 14px;
+				-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+			}
+			#rightnav div{
+				padding: 10px;
+				border-bottom: 1px solid #e2e2e2;
+			}
+			#rightnav div:hover{
+				color: white;
+				background-color: #264c44;
+			}
+			#main{
+				padding: 20px;
+				padding-bottom: 70px;
+				overflow: auto;
+				text-align: center;
+				font-size: 18px;
+			}
+			.fa:hover{
+				color: #82ffe2;
+			}
+			.alpimage{
+				padding: 10px;
+				background-color: white;
+				margin: 10px;
+				width: 25%;
+				border-radius: 3px;
+				-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+				box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.5);
+			}
+			.alpimage:hover{
+				-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+				-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+				box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+				background-color: #e8ffc1;
+			}
+			button{
+				outline: none;
+			}
+			.mainbtn{
+				padding: 20px;
+				background-color: white;
+				border: 2px solid white;
+				border-radius: 50px;
+				background-color: inherit;
+				color: white;
+				font-weight: bold;
+				margin: 10px;
+				min-width: 200px;
+			}
+			.mainbtn:hover{
+				color: #264c44;
+				background-color: white;
+			}
+			#flasher{
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				display: none;
+			}
+			#alpfocus{
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: rgba(0, 0, 0, .75);
+				display: none;
+				text-align: center;
+				padding-top: 100px;
+			}
+			#alpfocus img{
+				width: 50%;
+			}
+		</style>
+	</head>
+	<body>
+	
+		<div id="appbar"><i class="fa fa-bars" onclick="togglenav();"></i><span style="margin-left: 20px;">Arabic Alphabets Game</span><span style="float: right;"><i class="fa fa-ellipsis-v" onclick="togglernav()"></i></span></div>
+		<div id="leftnav"></div>
+		<div id="rightnav">
+			<div onclick="togglernav(); allalp();"><i class="fa fa-list" style="width: 20px;"></i>All Alphabets</div>
+			<div onclick="togglernav(); showhowt();"><i class="fa fa-question" style="width: 20px;"></i>How to play</div>
+			<div onclick="togglernav(); showabout();"><i class="fa fa-info" style="width: 20px;"></i>About</div>
+		</div>
+		<div id="main"></div>
+		<div id="flasher"></div>
+		<div id="alpfocus"></div>
+		
+		<script>
+		
+			//general audios
+			var click = new Howl({
+				src: ['click.mp3']
+			});
+			var correct = new Howl({
+				src: ['correct.mp3']
+			});
+			var wrong = new Howl({
+				src: ['wrong.mp3']
+			});
+			var unlocked = new Howl({
+				src: ['unlocked.mp3']
+			});
+			
+			//game lessons (moved)
+			var ulock = 0;
+			var alpfathah = [ "a", "ba", "ta", "tsa", "ja", "hha", "kho", "da", "dza", "ro", "za", "sa", "sya", "sho", "dhlo", "tho", "dho", "ea", "gho", "fa", "qo", "ka", "la", "ma", "na", "wa", "ha", "ya" ];
+			var alpkasrah = [ "i", "bi", "ti", "tsi", "ji", "hhi", "khi", "di", "dzi", "ri", "zi", "si", "syi", "shi", "dhli", "thi", "dhi", "ei", "ghi", "fi", "qi", "ki", "li", "mi", "ni", "wi", "hi", "yi" ];
+			var alpdammah = [ "u", "bu", "tu", "tsu", "ju", "hhu", "khu", "du", "dzu", "ru", "zu", "su", "syu", "shu", "dhlu", "thu", "dhu", "eu", "ghu", "fu", "qu", "ku", "lu", "mu", "nu", "wu", "hu", "yu" ];
+			
+			//saving data
+			var appData = {
+				title : "arabicalphabetsgame",
+				score : 100,
+				ulock : 0,
+			};
+			if(localStorage.getItem(appData.title) === null){
+				saveData();
+			}else{
+				appData = JSON.parse(localStorage.getItem(appData.title));
+			}
+			function saveData(){
+				localStorage.setItem(appData.title, JSON.stringify(appData));
+			}
+			ulock = appData.ulock;
+			
+			//adjusting blocks
+			adjustblocks();
+			function adjustblocks(){
+				$("#leftnav").css({ "height" : innerHeight - ($("#appbar").outerHeight()+(parseInt($("#leftnav").css("padding-top"))+parseInt($("#leftnav").css("padding-bottom")))) });
+				$("#main").css({ "height" : innerHeight - ($("#appbar").outerHeight()+(parseInt($("#main").css("padding-top"))+parseInt($("#main").css("padding-bottom")))) });
+			}
+			$( window ).resize(function() {
+				adjustblocks();
+			});
+			
+			//generating lessons on leftnav
+			showLessons();
+			function showLessons(){
+				$("#leftnav").html("").append("<div style='text-align: center; margin-bottom: 50px; font-size: 18px;'><img src='icon.png' width='128px'><p>Your score:<br><b><span id='score'>" +appData.score+ "</span></b></p></div><div class='lni'><b>Lessons list:</b></div>");
+				for(var i = 0; i < lessons.length; i++){
+					var lock = "unlock";
+					var lstyle = "";
+					if(i > appData.ulock){
+						lock = "lock";
+						lstyle = "style='color: gray;'";
+					}
+					$("#leftnav").append("<div class='lni' "+lstyle+" onclick='selectThisLesson("+i+")'><i class='fa fa-"+lock+"' style='width: 20px;'></i>Lesson " + (i+1) + "</div>");
+				}
+				$("#leftnav").append("<div class='lni' style='color: gray;' onclick='selectThisLesson("+i+")'><i class='fa fa-lock' style='width: 20px;'></i>Coming Soon</div>");
+			}
+			
+			//toggling leftnav
+			function togglenav(){
+				setTimeout(function(){
+					$("#leftnav").fadeToggle(500, function(){
+						if ($(this).is(':visible'))
+							$(this).css('display','inline-block');
+					});
+				}, 250);
+			}
+			
+			//toggling rightnav
+			function togglernav(){
+				setTimeout(function(){
+					$("#rightnav").toggle();
+				}, 250);
+			}
+			
+			//show current lesson
+			var currentAlphabets;
+			showCurrentLesson();
+			function showCurrentLesson(){
+				if(ulock+1 > lessons.length){
+					$("#main").html("<h1>Coming Soon</h1><p>We are going to add more lessons soon :D</p><p>Do you have any question? Send a mail to: habibieamrullah@gmail.com</p>");
+				}else{
+					currentAlphabets = [];
+					var selections = [];
+					for(var i = 0; i < lessons[ulock].length; i++){
+						selections.push("<img src='images/" + lessons[ulock][i] + ".png' class='alpimage' onclick=playSound('" + lessons[ulock][i] + "',"+i+")>");
+						currentAlphabets.push({ clicked : false });
+					}
+					shuffle(selections);
+					var tmp = "";
+					for(var i = 0; i < selections.length; i++){
+						tmp += selections[i];
+					}
+					$("#main").html("<h1>Lesson "+(ulock+1)+" of " +lessons.length+ "</h1><p>Tap all the alphabets one by one to listen and learn.</p><div style='direction: rtl'>" + tmp + "</div>");
+				}
+				click.play();
+			}
+			
+			//show all alphabets
+			function allalp(){
+				currentAlphabets = [];
+				//fathah
+				$("#main").html("").append("<h1>Alphabets with Fathah</h1><div id='alpfathah' style='direction: rtl'></div>");
+				for(var i = 0; i < alpfathah.length; i++){
+					$("#alpfathah").append("<img src='images/" + alpfathah[i] + ".png' class='alpimage' onclick=playSound('" + alpfathah[i] + "',"+i+")>");
+					currentAlphabets.push({ clicked : false });
+				}
+				//kasrah
+				$("#main").append("<h1>Alphabets with Kasrah</h1><div id='alpkasrah' style='direction: rtl'></div>");
+				for(var i = 0; i < alpkasrah.length; i++){
+					$("#alpkasrah").append("<img src='images/" + alpkasrah[i] + ".png' class='alpimage' onclick=playSound('" + alpkasrah[i] + "',"+i+")>");
+					currentAlphabets.push({ clicked : false });
+				}
+				//dammah
+				$("#main").append("<h1>Alphabets with Dammah</h1><div id='alpdammah' style='direction: rtl'></div>");
+				for(var i = 0; i < alpdammah.length; i++){
+					$("#alpdammah").append("<img src='images/" + alpdammah[i] + ".png' class='alpimage' onclick=playSound('" + alpdammah[i] + "',"+i+")>");
+					currentAlphabets.push({ clicked : false });
+				}
+			}
+			
+			//play current sound
+			var canplay = true;
+			function playSound(x, i){
+				if(canplay){
+					var sound = new Howl({
+						src: ['audio/' + x + '.mp3']
+					});
+					sound.play();
+					$("#alpfocus").html("<img src='images/" + x + ".png' class='alpimage'>").fadeIn();
+					canplay = false;
+					sound.on('end', function(){
+						canplay = true;
+						$("#alpfocus").fadeOut();
+					});
+					
+					//mark this alphabet as clicked
+					currentAlphabets[i].clicked = true;
+					
+					//checking is all alphabets are clicked
+					var allclicked = true;
+					for(var i = 0; i < currentAlphabets.length; i++){
+						if(currentAlphabets[i].clicked == false)
+							allclicked = false;
+					}
+					
+					if(allclicked){
+						showStartQuizButton();
+					}
+				}
+			}
+			
+			//showing start quiz button
+			function showStartQuizButton(){
+				setTimeout(function(){
+					$("#main").html("<h1>Great!</h1><p>To learn new lesson you must pass a test for this lesson first...</p><button class='mainbtn' onclick='showCurrentLesson()'>Repeat <i class='fa fa-refresh'></i></button><button class='mainbtn' onclick='prepareTests()'>Start The Test <i class='fa fa-arrow-right'></i></button>");
+					correct.play();
+				}, 1500);
+			}
+			
+			//preparing test
+			var currentTests;
+			var testNumber;
+			function prepareTests(){
+				currentTests = [];
+				for(var i = 0; i < tests[ulock].length; i++){
+					currentTests.push({ alp : tests[ulock][i], correct : false });
+				}
+				testNumber = 0;
+				startTest();
+			}
+			
+			//start current test
+			function startTest(){
+				$("#main").html("<h1>Test "+(testNumber+1)+" of "+currentTests.length+"</h1><p>Listen the audio, and select correct Arabic text according to the audio.</p><button class='mainbtn' onclick='playTestSound("+testNumber+")'><i class='fa fa-volume-up'></i> Play</button><div id='ansarea'></div>");
+				click.play();
+			}
+			
+			//play test sound
+			function playTestSound(x){
+				var sound = new Howl({
+					src: ['audio/' + currentTests[x].alp + '.mp3']
+				});
+				sound.play();
+				sound.on('end', function(){
+					showAnswerSelections();
+				});
+			}
+			
+			//show answer selections
+			function showAnswerSelections(){
+				var selections = [];
+				for(var i = 0; i < currentTests.length; i++){
+					selections.push("<img src='images/" + currentTests[i].alp + ".png' class='alpimage' onclick=checkTestAnswer('"+currentTests[i].alp+"')>");
+				}
+				shuffle(selections);
+				var tmp = "";
+				for(var i = 0; i < selections.length; i++){
+					tmp += selections[i];
+				}
+				$("#ansarea").html("<p>Which one?</p>" + tmp);
+			}
+			
+			//checking test answer is it correct or not
+			function checkTestAnswer(x){
+				if(currentTests[testNumber].alp === x){
+					userAnswer(1);
+				}else{
+					userAnswer(0);
+				}
+			}
+			
+			//user answer result
+			function userAnswer(x){
+				if(x == 0){
+					$("#main").html("<h1>Wrong!</h1><p>Sorry. You must learn again.</p><button class='mainbtn' onclick='showCurrentLesson();'><i class='fa fa-arrow-left'></i> Go Back</button>");
+					wrong.play();
+					flash(0);
+					appData.score -= 5;
+				}else{
+					testNumber++;
+					if(testNumber >= currentTests.length){
+						$("#main").html("<h1>Wonderful!</h1><p>Now you can unlock the next lesson.</p><button class='mainbtn' onclick='unlockNext();'>Next <i class='fa fa-arrow-right'></i></button>");
+					}else{
+						$("#main").html("<h1>Correct!</h1><p>Congratulation. Ready for next challenge?</p><button class='mainbtn' onclick='startTest();'>Next <i class='fa fa-arrow-right'></i></button>");
+					}
+					correct.play();
+					flash(1);
+					appData.score += 20;
+				}
+				saveData();
+				$("#score").html(appData.score);
+			}
+			
+			//flash red or green
+			function flash(x){
+				if(x == 0){
+					$("#flasher").css({ "background-color" : "red" }).show().fadeOut();
+				}else{
+					$("#flasher").css({ "background-color" : "lime" }).show().fadeOut();
+				}
+			}
+			
+			//unlock the next lesson
+			function unlockNext(){
+				ulock++;
+				if(ulock < lessons.length && ulock > appData.ulock){
+					appData.ulock = ulock;
+					saveData();
+					showLessons();
+					unlocked.play();
+				}
+				showCurrentLesson();
+			}
+			
+			//select this lesson
+			function selectThisLesson(x){
+				togglenav();
+				click.play();
+				if(x <= appData.ulock){
+					ulock = x;
+					showCurrentLesson();
+				}else{
+					$("#main").html("<h1>Locked!</h1><p>This lesson is locked.</p><button class='mainbtn' onclick='showCurrentLesson();'><i class='fa fa-arrow-back'></i> Back</button>");
+				}
+			}
+			
+			//show how to play
+			function showhowt(){
+				$("#main").html("<h1>How to play</h1><p>With this game you will be familiar to Arabic alphabets. Tap every alphabet on this app to play its sound and play with the tests on each lesson to unlock next lessons.</p>");
+			}
+			
+			//show about
+			function showabout(){
+				$("#main").html("<h1>About</h1><p>This app is developed by Habibie (Zofia Kreasi). Visit <a href='http://zofiakrasi.com/'>http://zofiakrasi.com/</a> or send a mail to habibieamrullah@gmail.com</p>");
+			}
+			
+			//array shuffle
+			function shuffle(array) {
+				var currentIndex = array.length, temporaryValue, randomIndex;
+				// While there remain elements to shuffle...
+				while (0 !== currentIndex) {
+					// Pick a remaining element...
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex -= 1;
+					// And swap it with the current element.
+					temporaryValue = array[currentIndex];
+					array[currentIndex] = array[randomIndex];
+					array[randomIndex] = temporaryValue;
+				}
+				return array;
+			}
+			
+		</script>
+		
+	</body>
+</html>
